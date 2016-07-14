@@ -1,0 +1,24 @@
+<html>
+    <h1>
+        Upload New Logo
+    </h1>
+
+<body>
+	
+	<form action="/img/upload" method="post" enctype="multipart/form-data">
+		
+		<p>
+			Logo ID : <input type="text" name="id" size="50" />
+	   	</p>
+	   	<p>
+			Select a file : <input type="file" name="uploadedFile" size="50" />
+	   	</p>
+
+	   	<p>
+		<input type="submit" value="Upload It" /> {{ .status }}
+	    </p>
+	</form>
+
+</body>
+
+</html>
