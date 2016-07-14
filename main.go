@@ -11,9 +11,6 @@ import (
     "net/http"
     "io"
     "regexp"
-
-    //"github.com/eduandrade/imageutil"
-    //"github.com/nfnt/resize"
     "github.com/disintegration/imaging"
 )
 
@@ -64,7 +61,7 @@ func resizeImage(c *gin.Context) {
     //m := imaging.Resize(img, width, height, imaging.Lanczos)
     //m := imaging.Thumbnail(img, width, height, imaging.Lanczos)
 
-   	newImage := imaging.New(width, height, color.NRGBA{0, 255, 0, 255})
+   	newImage := imaging.New(width, height, color.NRGBA{0, 0, 0, 0})
    	newImage = imaging.PasteCenter(newImage, m)
 
 	newfilename := fmt.Sprint("images/", id, "/resized_", width, "_", height, ".png")
