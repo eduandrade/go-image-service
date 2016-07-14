@@ -4,7 +4,7 @@ Rest API written in GO for uploading images and dynamically dimensioning them ac
 
 Format:
 
-http://localhost:8080/img/<image id>/<width>/<height>
+http://localhost:8080/img/image id/width/height
 
 Example:
 
