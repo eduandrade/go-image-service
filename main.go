@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
-	"os"
-	"image/png"
-	"image/color"
+    "fmt"
+    "strconv"
+    "os"
+    "image/png"
+    "image/color"
     "log"
     "net/http"
     "io"
@@ -16,12 +16,12 @@ import (
 )
 
 func main() {
-	log.Println("Starting app....")
+    log.Println("Starting app....")
 
-	r := gin.Default()
-    r.GET("/img/:id/:width/:height", resizeImageWithoutBg)
-	r.GET("/img/:id/:width/:height/:bgcolor", resizeImageWithBg)
-    r.POST("/img/upload", uploadImage)
+    r := gin.Default()
+    r.GET("/v0/:id/:width/:height", resizeImageWithoutBg)
+    r.GET("/v0/:id/:width/:height/:bgcolor", resizeImageWithBg)
+    r.POST("/upload", uploadImage)
 
     r.LoadHTMLGlob("templates/*")
     r.GET("/newlogo", func(c *gin.Context) {
@@ -29,10 +29,10 @@ func main() {
     })
     
     port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
-	r.Run(":" + port)
+    if port == "" {
+        port = "3000"
+    }
+    r.Run(":" + port)
 }
 
 func resizeImageWithoutBg(c *gin.Context) {
@@ -45,8 +45,8 @@ func resizeImageWithBg(c *gin.Context) {
 
 func resizeImage(bgcolor string, c *gin.Context) {
     id := c.Param("id")
-	uwidth, err := strconv.Atoi(c.Param("width"))
-	if err != nil {
+    uwidth, err := strconv.Atoi(c.Param("width"))
+    if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"status": "Invalid width"})
         return
     }
@@ -57,11 +57,11 @@ func resizeImage(bgcolor string, c *gin.Context) {
         return
     }
 
-	var width int = uwidth
-	var height int = uheight
+    var width int = uwidth
+    var height int = uheight
 
     filename := fmt.Sprint("images/", id, "/original.png")
-	file, err := os.Open(filename)
+    file, err := os.Open(filename)
     if err != nil {
         log.Println("Error opening file", err)
         c.JSON(http.StatusNotFound, gin.H{"status": "Error opening file " + filename})
@@ -76,8 +76,8 @@ func resizeImage(bgcolor string, c *gin.Context) {
         return
     }
     
-   	m := imaging.Fit(img, width, height, imaging.Lanczos)
-   	//m := imaging.Fill(img, width, height, imaging.Center, imaging.Lanczos)
+    m := imaging.Fit(img, width, height, imaging.Lanczos)
+    //m := imaging.Fill(img, width, height, imaging.Center, imaging.Lanczos)
     //m := imaging.Resize(img, width, height, imaging.Lanczos)
     //m := imaging.Thumbnail(img, width, height, imaging.Lanczos)
    	
@@ -96,7 +96,7 @@ func resizeImage(bgcolor string, c *gin.Context) {
 
     newImage = imaging.OverlayCenter(newImage, m, 1.0)
 
-	newfilename := fmt.Sprint("images/", id, "/resized_", width, "_", height, ".png")
+    newfilename := fmt.Sprint("images/", id, "/resized_", width, "_", height, ".png")
     out, err := os.Create(newfilename)
     if err != nil {
         log.Println("Error creating file", err)
@@ -161,6 +161,7 @@ type CustomColor struct {
     R, G, B uint8
 }
 
+// Extracted from https://github.com/lucasb-eyer/go-colorful
 // Hex parses a "html" hex color-string, either in the 3 "#f0c" or 6 "#ff1034" digits form.
 func hex(scol string) (CustomColor, error) {
     format := "%02x%02x%02x"
@@ -179,8 +180,6 @@ func hex(scol string) (CustomColor, error) {
         return CustomColor{}, fmt.Errorf("color: %v is not a hex-color", scol)
     }
 
-    //fmt.Printf(">RGB values: %v, %v, %v", r, g, b)
-    //return CustomColor{r*uint8(factor), g*uint8(factor), b*uint8(factor)}, nil
     return CustomColor{r, g, b}, nil
 }
 
